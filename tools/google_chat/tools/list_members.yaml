@@ -1,0 +1,126 @@
+identity:
+  name: list_members
+  author: langgenius
+  label:
+    en_US: List Members
+    zh_Hans: 列出成员
+    ja_JP: メンバー一覧
+  icon: icon.svg
+
+description:
+  human:
+    en_US: List all members in a Google Chat space
+    zh_Hans: 列出 Google Chat 空间中的所有成员
+    ja_JP: Google Chat スペースのすべてのメンバーをリスト
+  llm: List and retrieve information about all members in a Google Chat space with optional filtering
+
+parameters:
+  - name: space_name
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Space Name
+      zh_Hans: 空间名称
+      ja_JP: スペース名
+    human_description:
+      en_US: The resource name of the space (e.g., spaces/AAAA1234567 or just AAAA1234567)
+      zh_Hans: 空间的资源名称（例如：spaces/AAAA1234567 或仅 AAAA1234567）
+      ja_JP: スペースのリソース名（例：spaces/AAAA1234567 または AAAA1234567のみ）
+    llm_description: The unique identifier or resource name of the Google Chat space
+
+  - name: page_size
+    type: number
+    required: false
+    default: 20
+    form: llm
+    label:
+      en_US: Page Size
+      zh_Hans: 页面大小
+      ja_JP: ページサイズ
+    human_description:
+      en_US: Maximum number of members to return (1-100)
+      zh_Hans: 返回的最大成员数（1-100）
+      ja_JP: 返すメンバーの最大数（1-100）
+    llm_description: Maximum number of members to return per page (between 1 and 100)
+    min: 1
+    max: 100
+
+  - name: filter
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Filter
+      zh_Hans: 过滤器
+      ja_JP: フィルター
+    human_description:
+      en_US: Optional filter for members (e.g., member.type = "HUMAN")
+      zh_Hans: 成员的可选过滤器（例如：member.type = "HUMAN"）
+      ja_JP: メンバーのオプションフィルター（例：member.type = "HUMAN"）
+    llm_description: Optional filter string to filter members by type or other attributes
+
+  - name: show_groups
+    type: boolean
+    required: false
+    default: false
+    form: llm
+    label:
+      en_US: Show Groups
+      zh_Hans: 显示群组
+      ja_JP: グループを表示
+    human_description:
+      en_US: Whether to include Google Groups in the results
+      zh_Hans: 是否在结果中包含 Google Groups
+      ja_JP: 結果にGoogleグループを含めるかどうか
+    llm_description: Whether to include Google Groups memberships in the results
+
+  - name: show_invited
+    type: boolean
+    required: false
+    default: false
+    form: llm
+    label:
+      en_US: Show Invited
+      zh_Hans: 显示邀请的成员
+      ja_JP: 招待されたメンバーを表示
+    human_description:
+      en_US: Whether to include invited members who haven't joined yet
+      zh_Hans: 是否包含尚未加入的受邀成员
+      ja_JP: まだ参加していない招待されたメンバーを含めるかどうか
+    llm_description: Whether to include members in INVITED state who haven't joined yet
+
+output_schema:
+  type: object
+  properties:
+    total:
+      type: integer
+      description: Total number of members found
+    members:
+      type: array
+      description: List of member information
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Resource name of the membership
+          displayName:
+            type: string
+            description: Display name of the member
+          type:
+            type: string
+            description: Type of member (HUMAN, BOT, etc.)
+          state:
+            type: string
+            description: State of membership
+          role:
+            type: string
+            description: Role in the space
+    hasMore:
+      type: boolean
+      description: Whether there are more members available
+
+extra:
+  python:
+    source: tools/list_members.py

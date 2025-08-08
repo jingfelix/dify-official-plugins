@@ -1,0 +1,35 @@
+author: langgenius
+created_at: '2024-09-20T08:03:44.658609186Z'
+description:
+  en_US: A plugin for Google Chat API integration with OAuth authentication
+  zh_Hans: 带有 OAuth 认证的 Google Chat API 集成插件
+icon: icon.svg
+label:
+  en_US: Google Chat Plugin
+  zh_Hans: Google Chat 插件
+meta:
+  arch:
+    - amd64
+    - arm64
+  minimum_dify_version: 1.7.1
+  runner:
+    entrypoint: main
+    language: python
+    version: '3.12'
+  version: 0.0.1
+name: google_chat
+plugins:
+  tools:
+    - provider/google_chat.yaml
+resource:
+  memory: 1048576
+  permission:
+    model:
+      enabled: true
+      llm: true
+    tool:
+      enabled: true
+tags:
+  - utilities
+type: plugin
+version: 0.1.0

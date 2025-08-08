@@ -1,0 +1,56 @@
+identity:
+  name: get_space
+  author: langgenius
+  label:
+    en_US: Get Space
+    zh_Hans: 获取空间信息
+    ja_JP: スペース情報を取得
+  icon: icon.svg
+
+description:
+  human:
+    en_US: Get information about a Google Chat space
+    zh_Hans: 获取 Google Chat 空间的信息
+    ja_JP: Google Chat スペースの情報を取得
+  llm: Retrieve detailed information about a specific Google Chat space including its name, type, settings, and metadata
+
+parameters:
+  - name: space_name
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Space Name
+      zh_Hans: 空间名称
+      ja_JP: スペース名
+    human_description:
+      en_US: The resource name of the space (e.g., spaces/AAAA1234567 or just AAAA1234567)
+      zh_Hans: 空间的资源名称（例如：spaces/AAAA1234567 或仅 AAAA1234567）
+      ja_JP: スペースのリソース名（例：spaces/AAAA1234567 または AAAA1234567のみ）
+    llm_description: The unique identifier or resource name of the Google Chat space to retrieve information for
+
+output_schema:
+  type: object
+  properties:
+    name:
+      type: string
+      description: The resource name of the space
+    displayName:
+      type: string
+      description: The display name of the space
+    spaceType:
+      type: string
+      description: The type of the space (ROOM, DIRECT_MESSAGE, etc.)
+    threaded:
+      type: boolean
+      description: Whether messages are threaded in this space
+    spaceHistoryState:
+      type: string
+      description: The history state of the space
+    createTime:
+      type: string
+      description: When the space was created
+
+extra:
+  python:
+    source: tools/get_space.py

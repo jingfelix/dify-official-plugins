@@ -1,0 +1,135 @@
+identity:
+  name: list_messages
+  author: langgenius
+  label:
+    en_US: List Messages
+    zh_Hans: 列出消息
+    ja_JP: メッセージ一覧
+  icon: icon.svg
+
+description:
+  human:
+    en_US: List messages in a Google Chat space
+    zh_Hans: 列出 Google Chat 空间中的消息
+    ja_JP: Google Chat スペースのメッセージをリスト
+  llm: List and retrieve messages from a Google Chat space with filtering and sorting options
+
+parameters:
+  - name: space_name
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Space Name
+      zh_Hans: 空间名称
+      ja_JP: スペース名
+    human_description:
+      en_US: The resource name of the space (e.g., spaces/AAAA1234567 or just AAAA1234567)
+      zh_Hans: 空间的资源名称（例如：spaces/AAAA1234567 或仅 AAAA1234567）
+      ja_JP: スペースのリソース名（例：spaces/AAAA1234567 または AAAA1234567のみ）
+    llm_description: The unique identifier or resource name of the Google Chat space
+
+  - name: page_size
+    type: number
+    required: false
+    default: 25
+    form: llm
+    label:
+      en_US: Page Size
+      zh_Hans: 页面大小
+      ja_JP: ページサイズ
+    human_description:
+      en_US: Maximum number of messages to return (1-100)
+      zh_Hans: 返回的最大消息数（1-100）
+      ja_JP: 返すメッセージの最大数（1-100）
+    llm_description: Maximum number of messages to return (between 1 and 100, default is 25)
+    min: 1
+    max: 100
+
+  - name: filter
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Filter
+      zh_Hans: 过滤器
+      ja_JP: フィルター
+    human_description:
+      en_US: Optional filter for messages (e.g., createTime > "2024-01-01T00:00:00Z")
+      zh_Hans: 消息的可选过滤器（例如：createTime > "2024-01-01T00:00:00Z"）
+      ja_JP: メッセージのオプションフィルター（例：createTime > "2024-01-01T00:00:00Z"）
+    llm_description: Optional filter string to filter messages by various criteria
+
+  - name: order_by
+    type: string
+    required: false
+    default: "createTime DESC"
+    form: llm
+    label:
+      en_US: Order By
+      zh_Hans: 排序方式
+      ja_JP: 並び順
+    human_description:
+      en_US: Sort order for messages (e.g., "createTime DESC" or "createTime ASC")
+      zh_Hans: 消息排序方式（例如："createTime DESC" 或 "createTime ASC"）
+      ja_JP: メッセージのソート順（例："createTime DESC" または "createTime ASC"）
+    llm_description: Sort order for messages, default is newest first (createTime DESC)
+
+  - name: show_deleted
+    type: boolean
+    required: false
+    default: false
+    form: llm
+    label:
+      en_US: Show Deleted
+      zh_Hans: 显示已删除
+      ja_JP: 削除済みを表示
+    human_description:
+      en_US: Whether to include deleted messages in the results
+      zh_Hans: 是否在结果中包含已删除的消息
+      ja_JP: 削除されたメッセージを結果に含めるかどうか
+    llm_description: Whether to include deleted messages in the results
+
+output_schema:
+  type: object
+  properties:
+    total:
+      type: integer
+      description: Total number of messages found
+    messages:
+      type: array
+      description: List of message information
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Resource name of the message
+          text:
+            type: string
+            description: Text content of the message
+          createTime:
+            type: string
+            description: When the message was created
+          sender:
+            type: object
+            description: Information about the sender
+          thread:
+            type: object
+            description: Thread information
+          deleted:
+            type: boolean
+            description: Whether the message is deleted
+          hasAttachments:
+            type: boolean
+            description: Whether the message has attachments
+          reactionCount:
+            type: integer
+            description: Total number of reactions
+    hasMore:
+      type: boolean
+      description: Whether there are more messages available
+
+extra:
+  python:
+    source: tools/list_messages.py

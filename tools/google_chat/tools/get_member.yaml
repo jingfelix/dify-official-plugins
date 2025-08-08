@@ -1,0 +1,70 @@
+identity:
+  name: get_member
+  author: langgenius
+  label:
+    en_US: Get Member
+    zh_Hans: 获取成员信息
+    ja_JP: メンバー情報を取得
+  icon: icon.svg
+
+description:
+  human:
+    en_US: Get information about a specific member in a Google Chat space
+    zh_Hans: 获取 Google Chat 空间中特定成员的信息
+    ja_JP: Google Chat スペースの特定メンバーの情報を取得
+  llm: Retrieve detailed information about a specific member in a Google Chat space including their role, state, and profile information
+
+parameters:
+  - name: space_name
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Space Name
+      zh_Hans: 空间名称
+      ja_JP: スペース名
+    human_description:
+      en_US: The resource name of the space (e.g., spaces/AAAA1234567 or just AAAA1234567)
+      zh_Hans: 空间的资源名称（例如：spaces/AAAA1234567 或仅 AAAA1234567）
+      ja_JP: スペースのリソース名（例：spaces/AAAA1234567 または AAAA1234567のみ）
+    llm_description: The unique identifier or resource name of the Google Chat space
+
+  - name: member_name
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Member Name
+      zh_Hans: 成员名称
+      ja_JP: メンバー名
+    human_description:
+      en_US: The user ID or member name (e.g., users/123456789 or just 123456789)
+      zh_Hans: 用户 ID 或成员名称（例如：users/123456789 或仅 123456789）
+      ja_JP: ユーザーIDまたはメンバー名（例：users/123456789 または 123456789のみ）
+    llm_description: The unique identifier of the member to retrieve information for
+
+output_schema:
+  type: object
+  properties:
+    name:
+      type: string
+      description: The resource name of the membership
+    state:
+      type: string
+      description: The state of the membership (JOINED, INVITED, etc.)
+    role:
+      type: string
+      description: The role of the member (MEMBER, MANAGER)
+    memberType:
+      type: string
+      description: The type of member (HUMAN, BOT)
+    displayName:
+      type: string
+      description: The display name of the member
+    createTime:
+      type: string
+      description: When the member joined the space
+
+extra:
+  python:
+    source: tools/get_member.py

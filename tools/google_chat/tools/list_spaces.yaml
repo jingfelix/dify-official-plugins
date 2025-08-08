@@ -1,0 +1,91 @@
+identity:
+  name: list_spaces
+  author: langgenius
+  label:
+    en_US: List Spaces
+    zh_Hans: 列出空间
+    ja_JP: スペース一覧
+  icon: icon.svg
+
+description:
+  human:
+    en_US: List Google Chat spaces accessible to the authenticated user
+    zh_Hans: 列出已认证用户可访问的 Google Chat 空间
+    ja_JP: 認証されたユーザーがアクセスできるGoogle Chatスペースをリスト
+  llm: List all Google Chat spaces (rooms, DMs, group DMs) that the authenticated user or bot has access to
+
+parameters:
+  - name: page_size
+    type: number
+    required: false
+    default: 20
+    form: llm
+    label:
+      en_US: Page Size
+      zh_Hans: 页面大小
+      ja_JP: ページサイズ
+    human_description:
+      en_US: Maximum number of spaces to return (1-100)
+      zh_Hans: 返回的最大空间数（1-100）
+      ja_JP: 返すスペースの最大数（1-100）
+    llm_description: Maximum number of spaces to return (between 1 and 100, default is 20)
+    min: 1
+    max: 100
+
+  - name: filter
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Filter
+      zh_Hans: 过滤器
+      ja_JP: フィルター
+    human_description:
+      en_US: Optional filter for spaces (e.g., spaceType = "ROOM")
+      zh_Hans: 空间的可选过滤器（例如：spaceType = "ROOM"）
+      ja_JP: スペースのオプションフィルター（例：spaceType = "ROOM"）
+    llm_description: Optional filter string to filter spaces by type or other attributes (e.g., spaceType = "ROOM" for rooms only)
+
+output_schema:
+  type: object
+  properties:
+    total:
+      type: integer
+      description: Total number of spaces found
+    spaces:
+      type: array
+      description: List of space information
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Resource name of the space
+          displayName:
+            type: string
+            description: Display name of the space
+          spaceType:
+            type: string
+            description: Type of space (ROOM, DIRECT_MESSAGE, etc.)
+          singleUserBotDm:
+            type: boolean
+            description: Whether this is a 1:1 DM with a bot
+          threaded:
+            type: boolean
+            description: Whether messages are threaded
+          description:
+            type: string
+            description: Space description if available
+          spaceHistoryState:
+            type: string
+            description: History state of the space
+          createTime:
+            type: string
+            description: When the space was created
+    hasMore:
+      type: boolean
+      description: Whether there are more spaces available
+
+extra:
+  python:
+    source: tools/list_spaces.py
